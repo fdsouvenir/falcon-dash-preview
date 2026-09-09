@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "es2022"
+	},
+	"include": ["plugin/**/*.mjs", "scripts/**/*.mjs", "e2e-native/**/*.ts"]
+}

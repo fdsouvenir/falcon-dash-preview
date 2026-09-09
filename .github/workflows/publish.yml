@@ -1,0 +1,45 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    needs: ci
+    runs-on: ubuntu-latest
+    env:
+      OPENCLAW_STATE_DIR: ${{ github.workspace }}/artifacts/plugin-v4/publish-state
+      OPENCLAW_CONFIG_PATH: ${{ github.workspace }}/artifacts/plugin-v4/publish-config.json
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: https://npm.pkg.github.com
+          scope: '@fdsouvenir'
+
+      - name: Verify exact release tag and registry
+        run: node scripts/verify-release-metadata.mjs "$GITHUB_REF_NAME"
+
+      - run: npm ci
+
+      - name: Install pinned plugin SDK and Vault prerequisite
+        run: |
+          npm install --prefix "$RUNNER_TEMP/falcon-sdk" --ignore-scripts --no-audit --no-fund openclaw@2026.9.3
+          test -e node_modules/openclaw || ln -s "$RUNNER_TEMP/falcon-sdk/node_modules/openclaw" node_modules/openclaw
+          sudo apt-get update
+          sudo apt-get install -y keepassxc
+
+      - run: npm publish --tag "$NPM_DIST_TAG"
+        env:
+          NPM_DIST_TAG: ${{ contains(github.ref_name, '-') && 'next' || 'latest' }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

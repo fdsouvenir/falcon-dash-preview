@@ -1,0 +1,23 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build output
+build
+dist
+node_modules
+coverage
+
+# Isolated validation artifacts
+artifacts
+
+# Generated dependency runtime
+plugin/schema.mjs
+plugin/typebox-license.txt
+
+# Agent temporary approval/inspection artifacts, not product sources
+.openclaw/tmp/
+
+# ClawHub plugin inspector output
+reports

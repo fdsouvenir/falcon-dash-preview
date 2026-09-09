@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+# Release and Publish both call this reusable workflow on the same tag ref. A group keyed only by
+# ref put them in the same bucket, so one cancelled the other and publication silently never ran.
+# Keying by calling workflow keeps per-branch cancellation without letting the two tag workflows
+# cancel each other.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    env:
+      OPENCLAW_STATE_DIR: ${{ github.workspace }}/artifacts/plugin-v4/ci-state
+      OPENCLAW_CONFIG_PATH: ${{ github.workspace }}/artifacts/plugin-v4/ci-config.json
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install pinned SDK and synthetic Vault prerequisite
+        run: |
+          npm install --prefix "$RUNNER_TEMP/falcon-sdk" --ignore-scripts --no-audit --no-fund openclaw@2026.9.3
+          test -e node_modules/openclaw || ln -s "$RUNNER_TEMP/falcon-sdk/node_modules/openclaw" node_modules/openclaw
+          sudo apt-get update
+          sudo apt-get install -y keepassxc
+
+      - name: Verify package and registry metadata
+        run: node scripts/verify-release-metadata.mjs
+
+      - name: Declared host compatibility
+        run: node scripts/check-sdk-compat.mjs
+
+      - name: Security audit
+        run: npm audit --audit-level=high --omit=dev
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Harness check
+        run: npm run check:harness
+
+      - name: Doc freshness check
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: npm run check:docs -- --base "$BASE_SHA" --head "$HEAD_SHA"
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run check
+
+      - name: Test with coverage
+        run: |
+          mkdir -p coverage
+          npm run test:coverage | tee coverage/plugin-tests.txt
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
+      - name: Build
+        run: npm run build
+
+      - name: Managed SecretRef install and provider-bound proof
+        timeout-minutes: 5
+        run: npm run test:managed-runtime
+
+      - name: Upload managed runtime proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: managed-runtime-proof
+          path: |
+            artifacts/plugin-v4/managed-install-*/combined-proof.json
+            artifacts/plugin-v4/managed-install-*/install.log
+            artifacts/plugin-v4/managed-install-*/runtime-inspect.log
+            artifacts/plugin-v4/managed-install-*/managed-audit.log
+            artifacts/plugin-v4/managed-install-*/managed-provider.log
+          retention-days: 14
+
+  native-e2e:
+    needs: quality
+    uses: ./.github/workflows/e2e.yml

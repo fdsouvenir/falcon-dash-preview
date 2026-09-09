@@ -1,0 +1,47 @@
+builddocs/
+node_modules
+.svelte-kit/
+build/
+dist/
+.env
+.env.local
+.env.*.local
+.DS_Store
+*.log
+test-results/
+playwright-report/
+coverage/
+.omc/
+.stitch/
+*.pem
+*.key
+.vscode/
+.idea/
+mockups/
+.stitch/
+stats.html
+artifacts/*
+!artifacts/.gitkeep
+
+# Bundled schema runtime (created by build)
+plugin/schema.mjs
+plugin/typebox-license.txt
+
+# Agent temporary approval/inspection artifacts
+.openclaw/tmp/
+
+# ClawHub plugin inspector output
+reports
+
+# OpenClaw agent workspace. These belong to the operator running the agent, not to the product:
+# SOUL/USER/IDENTITY are persona and profile, memory/ holds dated personal notes, and the image
+# directory holds screenshots pasted into chat. This repository is public — never commit them.
+SOUL.md
+USER.md
+IDENTITY.md
+AGENT.md
+MEMORY.md
+BOOTSTRAP.md
+memory/
+.openclaw-cli-images/
+.openclaw/

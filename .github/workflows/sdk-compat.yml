@@ -1,0 +1,39 @@
+name: SDK compatibility
+
+# A monitor, not a merge gate. Upstream releases on its own schedule, so failing pull requests for
+# an unrelated OpenClaw release would block work that has nothing to do with it. This runs weekly
+# and on demand, and fails loudly when the newest host would refuse this plugin or has moved to a
+# Node range we no longer declare.
+on:
+  schedule:
+    - cron: '0 13 * * 1'
+  workflow_dispatch:
+
+jobs:
+  latest-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install the latest published SDK
+        run: |
+          npm install --prefix "$RUNNER_TEMP/falcon-sdk" --ignore-scripts --no-audit --no-fund openclaw@latest
+          rm -rf node_modules/openclaw
+          ln -s "$RUNNER_TEMP/falcon-sdk/node_modules/openclaw" node_modules/openclaw
+          node -p "'Resolved OpenClaw ' + require('openclaw/package.json').version"
+
+      - name: Declared host compatibility
+        run: node scripts/check-sdk-compat.mjs
+
+      - name: Type check against the latest SDK
+        run: npm run check

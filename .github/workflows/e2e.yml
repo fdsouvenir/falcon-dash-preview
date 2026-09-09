@@ -1,0 +1,47 @@
+name: Native Gateway E2E
+
+on:
+  workflow_call:
+
+jobs:
+  native-gateway:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      OPENCLAW_STATE_DIR: ${{ github.workspace }}/artifacts/plugin-v4/e2e-bootstrap-state
+      OPENCLAW_CONFIG_PATH: ${{ github.workspace }}/artifacts/plugin-v4/e2e-bootstrap-config.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: npm ci
+      - name: Install pinned Gateway SDK and encrypted Vault runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/falcon-sdk" --ignore-scripts --no-audit --no-fund openclaw@2026.9.3
+          test -e node_modules/openclaw || ln -s "$RUNNER_TEMP/falcon-sdk/node_modules/openclaw" node_modules/openclaw
+          sudo apt-get update
+          sudo apt-get install -y keepassxc
+      - name: Install Chromium on this isolated runner
+        run: npx playwright install --with-deps chromium
+      - name: Test packaged native plugin in a real Gateway
+        run: npm run test:native-e2e
+      - name: Upload safe native acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-gateway-evidence
+          path: |
+            artifacts/plugin-v4/native-screenshots/
+            artifacts/plugin-v4/native-playwright-report/
+            artifacts/plugin-v4/native-playwright-results/
+            artifacts/plugin-v4/native-e2e-*/host-proof.json
+            artifacts/plugin-v4/native-e2e-*/runner-result.json
+            artifacts/plugin-v4/native-e2e-*/harness-error.txt
+            artifacts/plugin-v4/native-e2e-*/connect-error.txt
+            artifacts/plugin-v4/native-e2e-*/gateway-console.log
+            artifacts/plugin-v4/native-e2e-*/install.log
+          retention-days: 14

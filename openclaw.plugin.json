@@ -1,0 +1,125 @@
+{
+	"id": "falcon-dash-preview",
+	"name": "Falcon Dash Preview",
+	"version": "4.4.1",
+	"description": "Operator console for OpenClaw: shared Work tracking for people and agents, a KeePassXC credential vault that resolves SecretRefs, service integrations, and authorized document workspaces.",
+	"categories": ["agent-orchestration"],
+	"icon": "https://raw.githubusercontent.com/fdsouvenir/falcon-dash-preview/main/assets/falcon-dash-icon.png",
+	"activation": {
+		"onStartup": true
+	},
+	"contracts": {
+		"tools": ["falcon_work", "falcon_integrations", "falcon_vault", "falcon_documents"],
+		"gatewayMethodDispatch": ["authenticated-request"]
+	},
+	"configSchema": {
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"dataDir": {
+				"type": "string",
+				"description": "Directory for Falcon Dash's own databases — Work, integrations, vault policy and audit history. Defaults to a falcon-dash directory inside the gateway state directory. Your KeePassXC database is not stored here; see vaultDatabase."
+			},
+			"modules": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"work": {
+						"type": "boolean",
+						"description": "Enable the Work page. Default true."
+					},
+					"integrations": {
+						"type": "boolean",
+						"description": "Enable the Integrations page. Default true."
+					},
+					"vault": {
+						"type": "boolean",
+						"description": "Enable the Vault page. Default true."
+					},
+					"documents": {
+						"type": "boolean",
+						"description": "Enable the Documents page. Default true."
+					}
+				},
+				"description": "Turn individual pages off. Every page is enabled unless you set it to false. Disabling a page also stops its tools and gateway methods being registered."
+			},
+			"vaultOwners": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "Profile IDs recorded in the vault policy for the audit trail. This is not an access allowlist: reaching an authenticated Gateway connection is the credential, so any operator who can sign in to the Control UI can reveal any entry. Restrict Gateway sign-in, not this list."
+			},
+			"vaultExecutors": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "Agent identifiers permitted to perform non-human vault operations, such as an agent creating or rotating a credential it owns. Agents can never reveal a value regardless of this setting. Checked on every worker call as a defence against a stale service instance."
+			},
+			"documentRoots": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["id", "path", "actors"],
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "Short identifier shown in the Documents page and used in paths."
+						},
+						"path": {
+							"type": "string",
+							"description": "Absolute path to the directory. Relative paths are rejected."
+						},
+						"actors": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Actor identifiers allowed to reach this root. Required and must be non-empty — a root with no actors is rejected rather than being open to everyone."
+						},
+						"writable": {
+							"type": "boolean",
+							"description": "Allow writes. Omitted or false means read-only; only an explicit true permits create, edit, rename and delete."
+						}
+					}
+				},
+				"description": "Directories the Documents page may reach. Anything not listed here is unreachable, and there is no default root."
+			},
+			"oauthRedirectUris": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"maxItems": 10,
+				"description": "Exact redirect URIs accepted when completing a provider OAuth flow. Leave empty to keep OAuth disabled. Maximum 10."
+			},
+			"vaultDatabase": {
+				"type": "string",
+				"description": "Absolute path to the KeePassXC database the Vault manages. Defaults to passwords.kdbx in the gateway state directory. An existing database at this path is adopted as-is and its entries are never rewritten."
+			},
+			"vaultKeyFile": {
+				"type": "string",
+				"description": "Absolute path to the key file that opens vaultDatabase. Defaults to vault.key in the gateway state directory. Access is key-file only; there is no master-password prompt."
+			}
+		}
+	},
+	"secretProviderIntegrations": {
+		"keepassxc": {
+			"providerAlias": "falcon-vault",
+			"displayName": "Falcon KeePassXC Vault",
+			"source": "exec",
+			"command": "${node}",
+			"args": ["./plugin/vault/resolve-secrets.mjs"],
+			"passEnv": ["PATH", "FALCON_VAULT_DIRECTORY"],
+			"jsonOnly": true,
+			"timeoutMs": 20000,
+			"maxOutputBytes": 1048576
+		}
+	},
+	"controlUi": {
+		"entry": "dist/control-ui/falcon/index.js",
+		"styles": ["dist/control-ui/falcon/index.css"]
+	}
+}

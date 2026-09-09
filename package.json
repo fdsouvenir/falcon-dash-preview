@@ -1,0 +1,123 @@
+{
+	"name": "@fdsouvenir/falcon-dash-preview",
+	"version": "4.4.1",
+	"description": "Operator console for OpenClaw: shared Work tracking for people and agents, a KeePassXC credential vault that resolves SecretRefs, service integrations, and authorized document workspaces.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fdsouvenir/falcon-dash-preview.git"
+	},
+	"homepage": "https://github.com/fdsouvenir/falcon-dash-preview#readme",
+	"bugs": {
+		"url": "https://github.com/fdsouvenir/falcon-dash-preview/issues"
+	},
+	"author": "fdsouvenir",
+	"license": "CC-BY-NC-4.0",
+	"keywords": [
+		"openclaw",
+		"dashboard",
+		"ai",
+		"ai-agents",
+		"operator-console",
+		"sveltekit",
+		"websocket"
+	],
+	"type": "module",
+	"files": [
+		"plugin/",
+		"!plugin/tests/",
+		"openclaw.plugin.json",
+		"scripts/build-plugin.mjs",
+		"plugin/schema.mjs",
+		"plugin/typebox-license.txt",
+		"dist/control-ui/",
+		"docs/End User/work.md",
+		"docs/End User/passwords.md",
+		"docs/End User/documents.md"
+	],
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com"
+	},
+	"engines": {
+		"node": ">=24.16.0 <25 || >=26.1.0"
+	},
+	"scripts": {
+		"build": "node scripts/build-plugin.mjs",
+		"agent:loop": "node scripts/agent-loop.mjs",
+		"check": "tsc --allowJs --checkJs --noEmit --module nodenext --moduleResolution nodenext --target es2022 --skipLibCheck plugin/index.mjs",
+		"check:docs": "node scripts/check-doc-freshness.mjs",
+		"check:harness": "node scripts/check-harness-docs.mjs",
+		"lint": "eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"test": "node --test --test-concurrency=1 plugin/tests/*.test.mjs",
+		"test:coverage": "node --experimental-test-coverage --test-coverage-include='plugin/**/*.mjs' --test-coverage-exclude='plugin/schema.mjs' --test-coverage-exclude='plugin/tests/**' --test --test-concurrency=1 plugin/tests/*.test.mjs",
+		"prepublishOnly": "npm run build:plugin && npm run test:plugin",
+		"release": "npm version",
+		"test:e2e": "npm run test:native-e2e",
+		"test:e2e:headed": "npm run test:native-e2e -- --headed",
+		"test:e2e:install": "playwright install chromium",
+		"test:e2e:ui": "npm run test:native-e2e -- --ui",
+		"test:e2e:report": "playwright show-report artifacts/plugin-v4/native-playwright-report",
+		"test:plugin": "node --test --test-concurrency=1 plugin/tests/*.test.mjs",
+		"build:plugin": "node scripts/build-plugin.mjs",
+		"check:plugin": "tsc --allowJs --checkJs --noEmit --module nodenext --moduleResolution nodenext --target es2022 --skipLibCheck plugin/index.mjs",
+		"precheck": "npm run build",
+		"pretest": "npm run build",
+		"pretest:coverage": "npm run build",
+		"test:managed-runtime": "npm run build && node scripts/verify-managed-install.mjs",
+		"test:native-e2e": "npm run build && node scripts/run-native-e2e.mjs",
+		"test:native-host": "npm run build && node scripts/run-native-e2e.mjs --host-only"
+	},
+	"lint-staged": {
+		"*.{js,mjs,cjs,ts}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{json,md,css,html,yaml,yml}": [
+			"prettier --write"
+		]
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.0",
+		"@playwright/test": "^1.56.1",
+		"@types/node": "^25.3.0",
+		"esbuild": "^0.28.1",
+		"eslint": "^10.0.0",
+		"eslint-config-prettier": "^10.0.0",
+		"globals": "^17.3.0",
+		"happy-dom": "^20.7.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
+		"prettier": "^3.8.1",
+		"rehype-sanitize": "^6.0.0",
+		"rehype-stringify": "^10.0.1",
+		"remark-gfm": "^4.0.1",
+		"remark-parse": "^11.0.0",
+		"remark-rehype": "^11.1.2",
+		"typebox": "1.3.18",
+		"typescript": "^5.7.0",
+		"typescript-eslint": "^8.0.0",
+		"unified": "^11.0.5"
+	},
+	"openclaw": {
+		"extensions": [
+			"./plugin/index.mjs"
+		],
+		"compat": {
+			"pluginApi": ">=2026.9.3",
+			"minGatewayVersion": "2026.9.3"
+		},
+		"build": {
+			"openclawVersion": "2026.9.3",
+			"pluginSdkVersion": "2026.9.3"
+		}
+	},
+	"peerDependencies": {
+		"openclaw": ">=2026.9.3"
+	},
+	"peerDependenciesMeta": {
+		"openclaw": {
+			"optional": true
+		}
+	}
+}
