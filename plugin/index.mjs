@@ -298,7 +298,9 @@ export default definePluginEntry({
 					{ scope: mode === 'read' ? 'operator.read' : 'operator.write' }
 				);
 			}
-			const route = `/plugins/falcon-dash/${module}`;
+			// Channel-derived so preview and production do not collide on one gateway, and so the
+			// fallback route matches the id the Control UI and the e2e spec address it by.
+			const route = `/plugins/${workFeature.pluginId}/${module}`;
 			api.session.controls.registerControlUiDescriptor({
 				id: module,
 				surface: 'tab',

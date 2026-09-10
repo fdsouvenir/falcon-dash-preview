@@ -49,4 +49,14 @@ const CHANNEL_IDS = {
 };
 if (manifest.id !== CHANNEL_IDS[pkg.name] || pkg.openclaw.extensions.length !== 1)
 	throw new Error('Expected one Falcon Dash plugin');
-console.log('Plugin JavaScript and single-entry package validated');
+
+// The native entry, the fallback route and the injected domain contract all derive their id from
+// the Work contract, while the Control UI loader serves and validates that entry against the
+// manifest id. If the two drift the loader refuses the entry and every Falcon page disappears at
+// once, so fail the build here rather than shipping a console with no working pages.
+const { workFeature } = await import('../plugin/work/feature-contract.mjs');
+if (workFeature.pluginId !== manifest.id)
+	throw new Error(
+		`Work contract pluginId '${workFeature.pluginId}' does not match manifest id '${manifest.id}'; run scripts/apply-channel-identity.mjs`
+	);
+console.log('Plugin JavaScript, plugin id and single-entry package validated');

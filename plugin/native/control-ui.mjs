@@ -2102,7 +2102,11 @@ function mount(container, context, module) {
 	};
 }
 export default defineControlUiPlugin({
-	id: 'falcon-dash',
+	// The Control UI loader refuses an entry whose id differs from the manifest id it was served
+	// under, and that refusal takes down every page this plugin registers. Derive it from the Work
+	// contract, which apply-channel-identity.mjs already rewrites per channel, so a preview build
+	// can never ship the production id.
+	id: workFeature.pluginId,
 	activate(host) {
 		const disposers = [];
 		for (const [id, label] of Object.entries(names)) {

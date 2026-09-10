@@ -130,7 +130,7 @@ export const tools = {
 };
 export function domainContract(enabled) {
 	return {
-		plugin: 'falcon-dash',
+		plugin: workFeature.pluginId,
 		version: '4.4.1',
 		...(enabled.includes('work')
 			? { work: { types: TYPES, task_states: TASK_STATES, feature: workFeature } }

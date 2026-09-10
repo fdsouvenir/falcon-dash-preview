@@ -116,6 +116,18 @@ const PLAIN_METADATA = {
 	allowed_executors: [],
 	execution_disabled: false
 };
+// The Control UI loader rejects an entry whose exported id differs from the manifest id it was
+// served under, and that rejection takes down all four pages at once rather than degrading one
+// view. The channel rewrite reached the manifest but not the entry, so compare against the
+// manifest rather than against the id the fixture injects into host.pluginId.
+test('The native entry id matches the manifest id the loader serves it under', () => {
+	const window = new Window({ url: 'https://fixture.invalid' });
+	const native = window.eval(bundle.outputFiles[0].text + ';FalconTest;');
+	assert.equal(native.default.id, PLUGIN_ID);
+	assert.equal(typeof native.default.activate, 'function');
+	window.happyDOM.abort();
+});
+
 test('Native plugin registers four pages and uses the typed feature query transport', async (t) => {
 	const f = await fixture(t, 'work', async (method, p) => {
 		assert.equal(method, 'plugins.sessionAction');
