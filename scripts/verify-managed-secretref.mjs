@@ -24,7 +24,7 @@ if (executable.isSymbolicLink() || executable.uid !== process.getuid() || execut
 const configFile = path.join(root, 'config.json'),
 	original = fs.readFileSync(configFile),
 	config = JSON.parse(original),
-	installed = path.join(root, 'state/extensions/falcon-dash'),
+	installed = path.join(root, 'state/extensions', pluginId),
 	parked = path.join(root, 'managed-test-removed-plugin');
 if (!fs.existsSync(path.join(installed, 'openclaw.plugin.json')) || fs.existsSync(parked))
 	throw Error('Expected installed isolated plugin without parked state');

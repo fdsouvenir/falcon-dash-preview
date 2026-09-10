@@ -40,7 +40,7 @@ if (version !== '2026.9.3') throw new Error('This harness pins OpenClaw 2026.9.3
 const configFile = path.join(root, 'config.json'),
 	original = fs.readFileSync(configFile),
 	config = JSON.parse(original.toString());
-const installed = path.join(root, 'state/extensions/falcon-dash');
+const installed = path.join(root, 'state/extensions', pluginId);
 if (!fs.existsSync(path.join(installed, 'plugin/index.mjs')))
 	throw new Error('Install the reviewed archive in this isolated state first');
 const secret = 'SYNTHETIC-PROVIDER-BOUND-CANARY',
@@ -161,7 +161,7 @@ const server = http.createServer(async (req, res) => {
 			system:
 				systems.includes(buildContract(['work', 'integrations', 'vault', 'documents'])) &&
 				systems.split(buildContract(['work', 'integrations', 'vault', 'documents'])).length === 2,
-			user: users.includes('"plugin":"falcon-dash"'),
+			user: users.includes(`"plugin":"${pluginId}"`),
 			credentialDelivered: req.headers.authorization === `Bearer ${secret}`,
 			body: parsed
 		});

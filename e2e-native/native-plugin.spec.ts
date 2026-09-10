@@ -1,9 +1,13 @@
 import { test, expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+// The plugin id differs per release channel, so every URL that names it is derived.
+const pluginId = JSON.parse(
+	fs.readFileSync(new URL('../openclaw.plugin.json', import.meta.url), 'utf8')
+).id as string;
 const owner = 'owner@fixture.invalid';
 async function openModule(page: Page, name: string) {
-	await page.goto(`/plugin?plugin=falcon-dash&id=${name.toLowerCase()}`);
+	await page.goto(`/plugin?plugin=${pluginId}&id=${name.toLowerCase()}`);
 	await expect(
 		page.locator('.falcon-native').getByRole('heading', { name, exact: true })
 	).toBeVisible();
@@ -330,7 +334,7 @@ test('Custom plugin UI off provides guidance instead of enabling native code', a
 }, info) => {
 	await request.post('/__fixture/ui', { data: { enabled: false } });
 	try {
-		await page.goto('/plugins/falcon-dash/work');
+		await page.goto(`/plugins/${pluginId}/work`);
 		await expect(page.getByText(/Custom plugin UI/)).toBeVisible();
 		await expect(page.locator('.falcon-native')).toHaveCount(0);
 		const dir = 'artifacts/plugin-v4/native-screenshots';

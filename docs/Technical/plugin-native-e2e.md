@@ -148,3 +148,11 @@ Vault cases assert readiness rather than performing it. The plugin provisions an
 startup, so `vaultReady()` waits for credential management to be present and clicks nothing. It
 replaced an earlier `unlock()` helper that clicked `Unlock` only when visible — a conditional step
 passes whether or not the control exists, which is exactly the regression these cases must catch.
+
+## Channel-derived plugin id
+
+Every URL and path in the suite that names the plugin reads the id from `openclaw.plugin.json`
+rather than hardcoding it. The preview and production channels install under different ids, so a
+literal `falcon-dash` navigates to a plugin that is not present in the other channel. The same
+applies to the harness scripts, which locate the installed extension at
+`state/extensions/<pluginId>`.
