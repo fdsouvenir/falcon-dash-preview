@@ -11,7 +11,7 @@ import { Integrations } from './integrations/service.mjs';
 import { adapters } from './integrations/adapters.mjs';
 import { HighLevelOAuth } from './integrations/oauth.mjs';
 import { nativeIntegration } from './integrations/native.mjs';
-import { tools, buildContract } from './contract.mjs';
+import { tools, buildContract, resolveCommandRequest } from './contract.mjs';
 import { render } from './ui.mjs';
 import { protectedVault } from './vault/native.mjs';
 
@@ -81,7 +81,7 @@ export default definePluginEntry({
 				if (p.action === 'related') return live.work.related(p.id, p.collection, p.query);
 				if (p.action === 'command') {
 					requireValue(actor, 'identity_required', 'A verified actor is required');
-					return live.work.execute(p.request, actor);
+					return live.work.execute(resolveCommandRequest(p.request), actor);
 				}
 			}
 			if (name === 'falcon_integrations') {
