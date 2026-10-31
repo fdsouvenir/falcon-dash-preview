@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falcon Dash Work - Project Detail (Platform Rebuild)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #131315;
+      --panel: #1b1b1d;
+      --row-hover: #212124;
+      --border: #353437;
+      --text: #e5e1e4;
+      --muted: #aaa9a3;
+      --amber: #f7bf59;
+      --danger: #e2564a;
+      --danger-dim: #3a1f1c;
+      --ok: #6fbf87;
+      --warn: #d8973c;
+      --agent: #7aa2d6;
+    }
+    body {
+      background-color: var(--canvas);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-mono {
+      font-family: 'Space Mono', monospace;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--canvas);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2d;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3e3e42;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-[#353437] selection:text-[#e5e1e4]">
+
+  <!-- 1. Top Bar -->
+  <header class="h-10 border-b border-[#353437] bg-[#131315] px-4 flex items-center justify-between sticky top-0 z-50 text-xs select-none">
+    <!-- Left: Brand + App Switcher / Main Tabs -->
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2 font-medium tracking-tight text-[#e5e1e4]">
+        <svg class="w-3.5 h-3.5 fill-current text-[#e5e1e4]" viewBox="0 0 16 16">
+          <path d="M8 0L2 4v4l6 4 6-4V4L8 0zm0 1.8l4.5 3L8 7.8 3.5 4.8 8 1.8zM3 9.4l4.5 3 4.5-3v2.4L8 15l-5-3.2V9.4z"/>
+        </svg>
+        <span>Falcon Dash</span>
+      </div>
+
+      <nav class="flex items-center space-x-1">
+        <span class="px-2 py-0.5 rounded bg-[#1b1b1d] text-[#e5e1e4] font-medium border border-[#353437]">Work</span>
+        <span class="px-2 py-0.5 text-[#aaa9a3] hover:text-[#e5e1e4] cursor-default">Vault</span>
+        <span class="px-2 py-0.5 text-[#aaa9a3] hover:text-[#e5e1e4] cursor-default">Documents</span>
+        <span class="px-2 py-0.5 text-[#aaa9a3] hover:text-[#e5e1e4] cursor-default">Integrations</span>
+      </nav>
+    </div>
+
+    <!-- Center / Right Controls -->
+    <div class="flex items-center gap-4">
+      <div class="flex items-center h-6 w-64 bg-[#1b1b1d] border border-[#353437] px-2 rounded-sm text-[#aaa9a3] font-mono text-[11px] justify-between">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[#7aa2d6]">/</span>
+          <span>Search work</span>
+        </div>
+        <kbd class="text-[10px] text-[#aaa9a3] bg-[#131315] px-1 border border-[#353437] rounded">ESC</kbd>
+      </div>
+
+      <div class="flex items-center gap-2 font-mono text-[11px]">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#6fbf87]"></span>
+        <span class="text-[#aaa9a3]">rev 1284</span>
+      </div>
+
+      <div class="px-2 py-0.5 rounded bg-[#1b1b1d] border border-[#353437] font-mono text-[11px] text-[#7aa2d6]">
+        agent:main
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container Layout: Fluid Left + Fixed 360px Evidence Rail -->
+  <div class="flex-1 flex w-full">
+    
+    <!-- Fluid Main Content Column -->
+    <main class="flex-1 min-w-0 border-r border-[#353437] pb-16 flex flex-col">
+      
+      <!-- Upper Section: Breadcrumb & Header & Attention & Milestones -->
+      <div class="px-6 pt-4 pb-6 border-b border-[#353437]">
+        <!-- 2. Breadcrumb -->
+        <div class="text-[12px] text-[#aaa9a3] flex items-center gap-1.5 mb-2.5">
+          <span>Projects</span>
+          <span class="text-[#353437]">/</span>
+          <span>Platform</span>
+          <span class="text-[#353437]">/</span>
+          <span class="text-[#e5e1e4]">Platform Rebuild</span>
+        </div>
+
+        <!-- 3. Page Header Block -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center gap-3">
+            <h1 class="text-[20px] font-medium tracking-tight text-[#e5e1e4]">Platform Rebuild</h1>
+            <span class="px-1.5 py-0.5 rounded text-[11px] bg-[#1b1b1d] text-[#aaa9a3] border border-[#353437]">open</span>
+            <span class="font-mono text-[11px] text-[#aaa9a3]">v1</span>
+          </div>
+          <div class="font-mono text-[12px] text-[#aaa9a3]">
+            id 3f7a9c21 · area Platform · 41 work items · created by agent:main
+          </div>
+        </div>
+
+        <!-- 4. Attention Banner (Only accent in upper half: 1px amber top rule) -->
+        <div class="mt-5 bg-[#1b1b1d] border-x border-b border-[#353437] border-t border-t-[#f7bf59] px-4 py-2.5 rounded-sm flex items-center justify-between cursor-pointer hover:bg-[#212124] transition-colors group">
+          <div class="flex items-center gap-3 text-xs">
+            <span class="text-[#e5e1e4] font-medium">6 items in this project are waiting on you</span>
+            <span class="text-[#353437]">·</span>
+            <span class="text-[#aaa9a3]">4 authorizations · 1 decision · 1 question</span>
+          </div>
+          <div class="flex items-center gap-1 font-mono text-[11px] text-[#aaa9a3] group-hover:text-[#e5e1e4]">
+            <span>view in board</span>
+            <span>&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 5. Milestone Chain -->
+        <div class="mt-6 pt-5 border-t border-[#353437]">
+          <div class="relative flex items-start justify-between w-full">
+            <!-- Connecting Line -->
+            <div class="absolute top-[5px] left-2 right-2 h-[1px] bg-[#353437] z-0"></div>
+
+            <!-- Milestone 1: Achieved (ok color) -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-2.5 h-2.5 bg-[#6fbf87] rounded-[1px] mb-2"></div>
+              <span class="text-[12px] text-[#aaa9a3] leading-snug">Contracts defined</span>
+            </div>
+
+            <!-- Milestone 2: Current (accent color, slightly larger marker, title in full text color) -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-3.5 h-3.5 bg-[#f7bf59] rounded-[1px] -mt-0.5 mb-1.5 shadow-[0_0_0_2px_#131315]"></div>
+              <span class="text-[12px] text-[#e5e1e4] font-medium leading-snug">Tenant data plane proven</span>
+            </div>
+
+            <!-- Milestone 3: Future (hollow marker, muted) -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-2.5 h-2.5 bg-[#131315] border border-[#aaa9a3] rounded-[1px] mb-2"></div>
+              <span class="text-[12px] text-[#aaa9a3] leading-snug">Signup and provisioning ready</span>
+            </div>
+
+            <!-- Milestone 4: Future -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-2.5 h-2.5 bg-[#131315] border border-[#aaa9a3] rounded-[1px] mb-2"></div>
+              <span class="text-[12px] text-[#aaa9a3] leading-snug">Commerce and accounting ready</span>
+            </div>
+
+            <!-- Milestone 5: Future -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-2.5 h-2.5 bg-[#131315] border border-[#aaa9a3] rounded-[1px] mb-2"></div>
+              <span class="text-[12px] text-[#aaa9a3] leading-snug">Compliance and governance ready</span>
+            </div>
+
+            <!-- Milestone 6: Future -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-2.5 h-2.5 bg-[#131315] border border-[#aaa9a3] rounded-[1px] mb-2"></div>
+              <span class="text-[12px] text-[#aaa9a3] leading-snug">First pursuit proven end to end</span>
+            </div>
+
+            <!-- Milestone 7: Future -->
+            <div class="relative z-10 flex flex-col items-center flex-1 max-w-[14%] text-center">
+              <div class="w-2.5 h-2.5 bg-[#131315] border border-[#aaa9a3] rounded-[1px] mb-2"></div>
+              <span class="text-[12px] text-[#aaa9a3] leading-snug">Handoff complete</span>
+            </div>
+          </div>
+
+          <!-- Subtext under chain -->
+          <div class="mt-4 font-mono text-[11px] text-[#aaa9a3]">
+            milestone 2 of 7 · 1 achieved
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 6. Main Content Area: Document Column + Sticky Table of Contents -->
+      <div class="px-6 py-8 flex gap-12 border-b border-[#353437]">
+        
+        <!-- Document Column (max 72ch measure, fluid, body copy 13px/1.6) -->
+        <article class="flex-1 max-w-[72ch]">
+          <!-- Label Header -->
+          <div class="flex items-center justify-between pb-3 mb-6 border-b border-[#353437]">
+            <span class="text-[11px] uppercase tracking-[0.06em] text-[#aaa9a3] font-medium">PLAN DOCUMENT</span>
+            <span class="font-mono text-[11px] text-[#aaa9a3]">revision 3</span>
+          </div>
+
+          <!-- Document Body -->
+          <div class="space-y-6 text-[13px] leading-[1.6] text-[#e5e1e4]">
+            <!-- Section 1 -->
+            <section id="thesis" class="space-y-3">
+              <h2 class="text-[15px] font-medium text-[#e5e1e4] tracking-tight">1. Thesis</h2>
+              <p class="text-[#e5e1e4]">
+                The current monolithic data layer limits isolation guarantees and prevents multi-region tenant routing. 
+                This project reconstructs the storage abstraction and session bus into autonomous, tenant-isolated data planes 
+                without breaking compatibility with existing worker runtimes.
+              </p>
+              <p class="text-[#aaa9a3]">
+                Migration will proceed with dual-write semantics enabled across all active storage adapters. Invariants are verified 
+                incrementally by agent-driven consistency checks before traffic authority transfers from legacy instances. 
+                Zero planned downtime is assumed throughout the cutover schedule.
+              </p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="authority" class="space-y-3 pt-2">
+              <h2 class="text-[15px] font-medium text-[#e5e1e4] tracking-tight">2. Operating Authority</h2>
+              <p class="text-[#e5e1e4]">
+                In accordance with the supervisor governance model, responsibility is demarcated into distinct execution 
+                and decision boundaries:
+              </p>
+              <ul class="space-y-2 text-[#aaa9a3] list-disc list-outside pl-4 marker:text-[#353437]">
+                <li>
+                  <strong class="text-[#e5e1e4] font-medium">User grants:</strong> Production database migration runs, security boundary definitions, 
+                  and irreversible namespace cutovers.
+                </li>
+                <li>
+                  <strong class="text-[#e5e1e4] font-medium">User answers:</strong> Architectural boundary ambiguities, credential scopes, 
+                  and vendor SLA exception requests.
+                </li>
+                <li>
+                  <strong class="text-[#e5e1e4] font-medium">Agent executes:</strong> Schema compilation, shadow reconciliation jobs, migration scripts, 
+                  synthetic workload verification, and rollback preparations.
+                </li>
+                <li>
+                  <strong class="text-[#e5e1e4] font-medium">Agent revokes:</strong> Expired ephemeral staging tokens and unverified staging deployments upon contract drift.
+                </li>
+              </ul>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="sequencing" class="space-y-3 pt-2">
+              <h2 class="text-[15px] font-medium text-[#e5e1e4] tracking-tight">3. Sequencing</h2>
+              <p class="text-[#aaa9a3]">
+                Execution follows a strict linear dependency sequence. Work in downstream stages remains parked until preceding 
+                boundary proofs achieve formal verification:
+              </p>
+              <div class="bg-[#1b1b1d] border border-[#353437] p-3.5 rounded-sm font-mono text-[12px] leading-relaxed text-[#e5e1e4] overflow-x-auto">
+                <div class="text-[#aaa9a3] mb-1">// verification pipeline</div>
+                <div>Contracts Definition &rarr; Shadow Dual-Write &rarr; Authority Check</div>
+                <div class="text-[#7aa2d6] pl-6">&darr;</div>
+                <div>Tenant Data Plane &rarr; OAuth Hardening &rarr; Provisioning Pipeline</div>
+                <div class="text-[#7aa2d6] pl-6">&darr;</div>
+                <div>Tenant Cutover &rarr; Final Storage Eviction</div>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <!-- Sticky Table of Contents (240px wide) -->
+        <aside class="w-[240px] shrink-0 sticky top-16 self-start pt-1">
+          <div class="text-[11px] uppercase tracking-[0.06em] text-[#aaa9a3] font-medium pb-2 border-b border-[#353437] mb-3">
+            CONTENTS
+          </div>
+          <nav class="flex flex-col space-y-1 text-[13px]">
+            <!-- Active entry with 2px accent left edge and full text color -->
+            <a href="#thesis" class="px-2.5 py-1.5 text-[#e5e1e4] border-l-2 border-[#f7bf59] bg-[#1b1b1d]/40 font-medium block">
+              1. Thesis
+            </a>
+            <a href="#authority" class="px-2.5 py-1.5 text-[#aaa9a3] hover:text-[#e5e1e4] border-l-2 border-transparent block">
+              2. Operating Authority
+            </a>
+            <a href="#sequencing" class="px-2.5 py-1.5 text-[#aaa9a3] hover:text-[#e5e1e4] border-l-2 border-transparent block">
+              3. Sequencing
+            </a>
+            <span class="px-2.5 py-1.5 text-[#aaa9a3]/70 border-l-2 border-transparent block cursor-default">
+              4. Domain Model
+            </span>
+            <span class="px-2.5 py-1.5 text-[#aaa9a3]/70 border-l-2 border-transparent block cursor-default">
+              5. Milestones
+            </span>
+            <span class="px-2.5 py-1.5 text-[#aaa9a3]/70 border-l-2 border-transparent block cursor-default">
+              6. Risks
+            </span>
+          </nav>
+        </aside>
+
+      </div>
+
+      <!-- 7. Work Index (Full content width, grouped by status) -->
+      <section class="px-6 py-8 border-b border-[#353437]">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-[11px] uppercase tracking-[0.06em] text-[#aaa9a3] font-medium">WORK · 41</h2>
+        </div>
+
+        <div class="space-y-6">
+          
+          <!-- Subsection: WAITING · 12 -->
+          <div>
+            <div class="font-mono text-[11px] text-[#aaa9a3] uppercase tracking-wider mb-2 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#d8973c]"></span>
+              <span>WAITING · 12</span>
+            </div>
+            
+            <div class="border-t border-[#353437] divide-y divide-[#353437]">
+              <!-- Row 1 -->
+              <div class="h-10 flex items-center px-3 hover:bg-[#212124] transition-colors relative group">
+                <!-- 2px status edge -->
+                <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#d8973c]"></div>
+                <!-- Glyph -->
+                <span class="text-[#aaa9a3] font-mono text-[12px] mr-3">&loz;</span>
+                <!-- Title -->
+                <span class="text-[14px] font-medium text-[#e5e1e4] flex-1 truncate">Implement the tenant data plane</span>
+                <!-- Chips -->
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#1b1b1d] text-[#aaa9a3] border border-[#353437]">
+                    authorization_required
+                  </span>
+                  <span class="font-mono text-[11px] text-[#aaa9a3]">tsk_09a1</span>
+                </div>
+              </div>
+
+              <!-- Row 2 -->
+              <div class="h-10 flex items-center px-3 hover:bg-[#212124] transition-colors relative group">
+                <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#d8973c]"></div>
+                <span class="text-[#aaa9a3] font-mono text-[12px] mr-3">&loz;</span>
+                <span class="text-[14px] font-medium text-[#e5e1e4] flex-1 truncate">Harden the OAuth token lifecycle</span>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#1b1b1d] text-[#aaa9a3] border border-[#353437]">
+                    authorization_required
+                  </span>
+                  <span class="font-mono text-[11px] text-[#aaa9a3]">tsk_4e81</span>
+                </div>
+              </div>
+
+              <!-- Row 3 -->
+              <div class="h-10 flex items-center px-3 hover:bg-[#212124] transition-colors relative group">
+                <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#d8973c]"></div>
+                <span class="text-[#aaa9a3] font-mono text-[12px] mr-3">?</span>
+                <span class="text-[14px] font-medium text-[#e5e1e4] flex-1 truncate">Define the signup and activation manifest</span>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-mono bg-[#1b1b1d] text-[#aaa9a3] border border-[#353437]">
+                    answerable_by: user
+                  </span>
+                  <span class="font-mono text-[11px] text-[#aaa9a3]">qst_88f2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subsection: IN PROGRESS · 4 -->
+          <div>
+            <div class="font-mono text-[11px] text-[#aaa9a3] uppercase tracking-wider mb-2 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#7aa2d6]"></span>
+              <span>IN PROGRESS · 4</span>
+            </div>
+
+            <div class="border-t border-[#353437] divide-y divide-[#353437]">
+              <!-- Row 1 -->
+              <div class="h-10 flex items-center px-3 hover:bg-[#212124] transition-colors relative group">
+                <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#7aa2d6]"></div>
+                <span class="text-[#7aa2d6] font-mono text-[12px] mr-3">&bull;</span>
+                <span class="text-[14px] font-medium text-[#e5e1e4] flex-1 truncate">Draft the provider abstraction layer</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-[11px] text-[#aaa9a3]">tsk_901b</span>
+                </div>
+              </div>
+
+              <!-- Row 2 -->
+              <div class="h-10 flex items-center px-3 hover:bg-[#212124] transition-colors relative group">
+                <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#7aa2d6]"></div>
+                <span class="text-[#7aa2d6] font-mono text-[12px] mr-3">&bull;</span>
+                <span class="text-[14px] font-medium text-[#e5e1e4] flex-1 truncate">Benchmark the new model against the current context</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-[11px] text-[#aaa9a3]">tsk_66c2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subsection Headers for READY & OPEN and Remaining Count -->
+          <div class="pt-1 flex flex-col gap-2">
+            <div class="flex items-center gap-6 font-mono text-[11px] text-[#aaa9a3]">
+              <span>READY · 3</span>
+              <span>·</span>
+              <span>OPEN · 22</span>
+            </div>
+            <div class="font-mono text-[12px] text-[#aaa9a3] pt-1">
+              + 34 more items in this project
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 9. Low-Emphasis Authority Controls (Bottom of document column) -->
+      <section class="px-6 pt-10 pb-4">
+        <div class="pt-6 border-t border-[#353437] flex items-center gap-6">
+          <button type="button" class="px-3 py-1.5 text-xs font-medium text-[#e5e1e4] bg-[#1b1b1d] border border-[#353437] rounded-sm hover:bg-[#212124] transition-colors">
+            Archive project
+          </button>
+          <button type="button" class="text-xs font-medium text-[#e2564a] hover:underline transition-all">
+            Abandon project
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 8. Far Right: Fixed 360px Evidence Rail (Full Page Height) -->
+    <aside class="w-[360px] shrink-0 bg-[#131315] flex flex-col select-none">
+      
+      <!-- Section 1: ARTIFACTS -->
+      <div class="p-5 border-b border-[#353437]">
+        <div class="text-[11px] uppercase tracking-[0.06em] text-[#aaa9a3] font-medium mb-3">
+          ARTIFACTS
+        </div>
+        
+        <div class="space-y-3">
+          <!-- Artifact 1: Definition -->
+          <div class="p-2.5 bg-[#1b1b1d] border border-[#353437] rounded-sm">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono uppercase bg-[#212124] text-[#e5e1e4] border border-[#353437]">
+                  definition
+                </span>
+                <span class="font-mono text-[11px] text-[#aaa9a3]">rev 3</span>
+              </div>
+            </div>
+            <div class="font-mono text-[11px] text-[#aaa9a3]">
+              agent:main · 2 days ago
+            </div>
+          </div>
+
+          <!-- Artifact 2: Plan -->
+          <div class="p-2.5 bg-[#1b1b1d] border border-[#353437] rounded-sm">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono uppercase bg-[#212124] text-[#e5e1e4] border border-[#353437]">
+                  plan
+                </span>
+                <span class="font-mono text-[11px] text-[#aaa9a3]">rev 2</span>
+              </div>
+            </div>
+            <div class="font-mono text-[11px] text-[#aaa9a3]">
+              agent:main · 2 days ago
+            </div>
+          </div>
+
+          <!-- Artifact 3: Change (Carrying Drift Badge in warning color) -->
+          <div class="p-2.5 bg-[#1b1b1d] border border-[#353437] rounded-sm">
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-2">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono uppercase bg-[#212124] text-[#e5e1e4] border border-[#353437]">
+                  change
+                </span>
+                <span class="font-mono text-[11px] text-[#aaa9a3]">rev 1</span>
+              </div>
+            </div>
+            <!-- Warning-colored mono drift badge -->
+            <div class="mb-1.5">
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#131315] text-[#d8973c] border border-[#d8973c]/50 inline-block">
+                pinned @rev 1 · current @rev 3
+              </span>
+            </div>
+            <div class="font-mono text-[11px] text-[#aaa9a3]">
+              agent:main · 5 days ago
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: PARTICIPANTS -->
+      <div class="p-5 border-b border-[#353437]">
+        <div class="text-[11px] uppercase tracking-[0.06em] text-[#aaa9a3] font-medium mb-3">
+          PARTICIPANTS
+        </div>
+        
+        <div class="space-y-1.5 font-mono text-[12px]">
+          <div class="flex items-center gap-2 text-[#7aa2d6]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#7aa2d6]"></span>
+            <span>agent:main</span>
+          </div>
+          <div class="flex items-center gap-2 text-[#7aa2d6]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#7aa2d6]"></span>
+            <span>agent:research</span>
+          </div>
+          <div class="flex items-center gap-2 text-[#e5e1e4]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#aaa9a3]"></span>
+            <span>user</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: HISTORY (Flat list of provenance lines, no ornaments/spines) -->
+      <div class="p-5 flex-1">
+        <div class="text-[11px] uppercase tracking-[0.06em] text-[#aaa9a3] font-medium mb-3">
+          HISTORY
+        </div>
+        
+        <div class="space-y-2.5 font-mono text-[12px] text-[#aaa9a3]">
+          <div class="hover:text-[#e5e1e4] transition-colors">
+            agent:main · revise_plan · 2d
+          </div>
+          <div class="hover:text-[#e5e1e4] transition-colors">
+            agent:main · associate · 3d
+          </div>
+          <div class="hover:text-[#e5e1e4] transition-colors">
+            user · authorize · 5d
+          </div>
+          <div class="hover:text-[#e5e1e4] transition-colors">
+            agent:main · revise_definition · 5d
+          </div>
+          <div class="hover:text-[#e5e1e4] transition-colors">
+            agent:main · create · 8d
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- Bottom Keyboard Hint Bar -->
+  <footer class="h-6 border-t border-[#353437] bg-[#131315] px-4 flex items-center justify-between text-[11px] font-mono text-[#aaa9a3] select-none sticky bottom-0 z-40">
+    <div class="flex items-center gap-4">
+      <span><strong class="text-[#e5e1e4]">J/K</strong> navigate</span>
+      <span>·</span>
+      <span><strong class="text-[#e5e1e4]">ENTER</strong> inspect evidence</span>
+      <span>·</span>
+      <span><strong class="text-[#e5e1e4]">/</strong> search</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#6fbf87]"></span>
+      <span>evidence sync: live</span>
+    </div>
+  </footer>
+
+</body>
+</html>

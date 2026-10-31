@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#131315]">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Falcon Dash Work - Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+          colors: {
+            canvas: '#131315',
+            panel: '#1b1b1d',
+            'row-hover': '#212124',
+            border: '#353437',
+            text: '#e5e1e4',
+            muted: '#aaa9a3',
+            amber: '#f7bf59',
+            danger: '#e2564a',
+            ok: '#6fbf87',
+            warn: '#d8973c',
+            agent: '#7aa2d6',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar and precise utility styles */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #131315; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2d; }
+    ::-webkit-scrollbar-thumb:hover { background: #353437; }
+    .focus-ring-amber {
+      outline: 1px solid #f7bf59;
+      background-color: #212124;
+    }
+  </style>
+</head>
+<body class="h-full bg-canvas text-text font-sans antialiased select-none flex flex-col overflow-hidden text-[13px]">
+
+  <!-- Top bar -->
+  <header class="h-10 shrink-0 bg-canvas border-b border-border flex items-center justify-between px-4">
+    <div class="flex items-center space-x-6">
+      <!-- Wordmark -->
+      <div class="flex items-center space-x-2 font-semibold text-text text-sm tracking-tight">
+        <svg class="w-4 h-4 text-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>Falcon Dash</span>
+      </div>
+
+      <!-- Module Navigation -->
+      <nav class="flex items-center space-x-1">
+        <span class="px-2.5 py-1 text-xs font-medium text-text bg-[#222226] rounded-[3px]">Work</span>
+        <span class="px-2.5 py-1 text-xs font-normal text-muted hover:text-text cursor-default">Vault</span>
+        <span class="px-2.5 py-1 text-xs font-normal text-muted hover:text-text cursor-default">Documents</span>
+        <span class="px-2.5 py-1 text-xs font-normal text-muted hover:text-text cursor-default">Integrations</span>
+      </nav>
+    </div>
+
+    <!-- Search & System Meta -->
+    <div class="flex items-center space-x-5">
+      <div class="relative flex items-center">
+        <span class="text-muted absolute left-2.5 text-xs font-mono">/</span>
+        <input 
+          type="text" 
+          placeholder="Search work" 
+          readonly 
+          class="bg-panel border border-border text-text placeholder-muted text-xs pl-6 pr-8 py-1 rounded-[3px] w-64 focus:outline-none"
+        />
+        <span class="absolute right-2 text-[10px] font-mono text-muted border border-border px-1 rounded">ESC</span>
+      </div>
+
+      <div class="flex items-center space-x-3 text-xs font-mono">
+        <div class="flex items-center space-x-1.5 text-muted">
+          <span class="w-1.5 h-1.5 rounded-full bg-ok"></span>
+          <span>rev 1284</span>
+        </div>
+        <span class="px-2 py-0.5 text-[11px] rounded bg-[#1f232b] text-agent border border-[#2b3547]">agent:main</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sub-navigation -->
+  <div class="h-8 shrink-0 bg-canvas border-b border-border flex items-center px-4 space-x-6 text-xs">
+    <span class="text-muted py-1.5 cursor-default hover:text-text">Board</span>
+    <span class="text-text font-medium py-1.5 border-b-2 border-text cursor-default -mb-px">Projects</span>
+    <span class="text-muted py-1.5 cursor-default hover:text-text">Areas</span>
+    <span class="text-muted py-1.5 cursor-default hover:text-text">History</span>
+  </div>
+
+  <!-- Main Split Layout -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Left Rail: AREAS (240px) -->
+    <aside class="w-[240px] shrink-0 border-r border-border bg-canvas flex flex-col py-3">
+      <div class="px-4 pb-2">
+        <span class="text-[11px] font-mono uppercase tracking-wider text-muted font-medium">Areas</span>
+      </div>
+      <div class="flex-1 overflow-y-auto">
+        <!-- Area Rows: 24px high -->
+        <!-- All work (Selected) -->
+        <div class="relative flex items-center justify-between h-6 px-4 bg-[#1b1b1f] text-text cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-amber"></div>
+          <span class="text-xs font-medium">All work</span>
+          <span class="text-xs font-mono text-muted">86</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Platform</span>
+          <span class="text-xs font-mono text-muted">24</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Customer</span>
+          <span class="text-xs font-mono text-muted">18</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Growth</span>
+          <span class="text-xs font-mono text-muted">14</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Operations</span>
+          <span class="text-xs font-mono text-muted">12</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Research</span>
+          <span class="text-xs font-mono text-muted">9</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Personal</span>
+          <span class="text-xs font-mono text-muted">6</span>
+        </div>
+
+        <div class="flex items-center justify-between h-6 px-4 text-muted hover:text-text hover:bg-panel cursor-default">
+          <span class="text-xs">Archive</span>
+          <span class="text-xs font-mono text-muted">3</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area: Projects Table -->
+    <main class="flex-1 flex flex-col overflow-y-auto bg-canvas">
+      
+      <!-- Table Header (Sticky) -->
+      <div class="sticky top-0 z-10 bg-canvas border-b border-border grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 py-2 items-center text-[11px] font-mono uppercase tracking-wider text-muted">
+        <div>Title</div>
+        <div>Health</div>
+        <div>Milestone</div>
+        <div class="text-right pr-4">Work</div>
+        <div class="text-right">Attention</div>
+      </div>
+
+      <!-- Active Projects Section -->
+      <div class="divide-y divide-border">
+        
+        <!-- Row 1: Platform Rebuild (Keyboard Focused) -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center focus-ring-amber cursor-default">
+          <!-- 2px status edge on far left (warn due to waiting status) -->
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          
+          <!-- TITLE -->
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Platform Rebuild</span>
+            <span class="text-xs text-muted leading-tight">Platform</span>
+          </div>
+
+          <!-- HEALTH -->
+          <div class="flex flex-col justify-center">
+            <!-- 4px segmented status-mix bar ~120px -->
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 12 open (#aaa9a3), 3 ready (#e5e1e4), 4 running (#7aa2d6), 5 waiting (#d8973c), 17 ok (#6fbf87) => total 41 -->
+              <div style="width: 29.2%;" class="h-full bg-muted" title="12 open"></div>
+              <div style="width: 7.3%;" class="h-full bg-text" title="3 ready"></div>
+              <div style="width: 9.8%;" class="h-full bg-agent" title="4 running"></div>
+              <div style="width: 12.2%;" class="h-full bg-warn" title="5 waiting"></div>
+              <div style="width: 41.5%;" class="h-full bg-ok" title="17 completed"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">12 open · 3 ready · 4 running · 5 waiting</span>
+          </div>
+
+          <!-- MILESTONE -->
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-text font-normal truncate">Tenant data plane proven</span>
+            <span class="text-[11px] font-mono text-muted">milestone 2 of 7</span>
+          </div>
+
+          <!-- WORK -->
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            41
+          </div>
+
+          <!-- ATTENTION (accent color since > 0) -->
+          <div class="text-right font-mono text-[13px] font-medium text-amber">
+            6
+          </div>
+        </div>
+
+        <!-- Row 2: Customer Onboarding -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Customer Onboarding</span>
+            <span class="text-xs text-muted leading-tight">Customer</span>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 8 open, 2 ready, 3 running, 4 waiting, 1 ok => total 18 -->
+              <div style="width: 44.4%;" class="h-full bg-muted"></div>
+              <div style="width: 11.1%;" class="h-full bg-text"></div>
+              <div style="width: 16.7%;" class="h-full bg-agent"></div>
+              <div style="width: 22.2%;" class="h-full bg-warn"></div>
+              <div style="width: 5.6%;" class="h-full bg-ok"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">8 open · 2 ready · 3 running · 4 waiting</span>
+          </div>
+
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-text font-normal truncate">Signup and provisioning path ready</span>
+            <span class="text-[11px] font-mono text-muted">milestone 1 of 4</span>
+          </div>
+
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            18
+          </div>
+
+          <div class="text-right font-mono text-[13px] font-medium text-amber">
+            3
+          </div>
+        </div>
+
+        <!-- Row 3: Market Expansion -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Market Expansion</span>
+            <span class="text-xs text-muted leading-tight">Growth</span>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 6 open, 1 ready, 2 running, 1 waiting, 1 ok => total 11 -->
+              <div style="width: 54.5%;" class="h-full bg-muted"></div>
+              <div style="width: 9.1%;" class="h-full bg-text"></div>
+              <div style="width: 18.2%;" class="h-full bg-agent"></div>
+              <div style="width: 9.1%;" class="h-full bg-warn"></div>
+              <div style="width: 9.1%;" class="h-full bg-ok"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">6 open · 1 ready · 2 running · 1 waiting</span>
+          </div>
+
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-text font-normal truncate">First research package delivered</span>
+            <span class="text-[11px] font-mono text-muted">milestone 1 of 3</span>
+          </div>
+
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            11
+          </div>
+
+          <div class="text-right font-mono text-[13px] font-medium text-amber">
+            2
+          </div>
+        </div>
+
+        <!-- Row 4: Billing Reconciliation -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Billing Reconciliation</span>
+            <span class="text-xs text-muted leading-tight">Operations</span>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 3 open, 0 ready, 1 running, 2 waiting => total 6 -->
+              <div style="width: 50.0%;" class="h-full bg-muted"></div>
+              <div style="width: 0%;" class="h-full bg-text"></div>
+              <div style="width: 16.7%;" class="h-full bg-agent"></div>
+              <div style="width: 33.3%;" class="h-full bg-warn"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">3 open · 0 ready · 1 running · 2 waiting</span>
+          </div>
+
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-muted italic">no milestones</span>
+          </div>
+
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            6
+          </div>
+
+          <div class="text-right font-mono text-[13px] font-medium text-amber">
+            1
+          </div>
+        </div>
+
+        <!-- Row 5: Website Refresh -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Website Refresh</span>
+            <span class="text-xs text-muted leading-tight">Growth</span>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 4 open, 2 ready, 1 running, 0 waiting, 1 ok => total 8 -->
+              <div style="width: 50.0%;" class="h-full bg-muted"></div>
+              <div style="width: 25.0%;" class="h-full bg-text"></div>
+              <div style="width: 12.5%;" class="h-full bg-agent"></div>
+              <div style="width: 0%;" class="h-full bg-warn"></div>
+              <div style="width: 12.5%;" class="h-full bg-ok"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">4 open · 2 ready · 1 running · 0 waiting</span>
+          </div>
+
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-text font-normal truncate">Pricing page published</span>
+            <span class="text-[11px] font-mono text-muted">milestone 3 of 3</span>
+          </div>
+
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            8
+          </div>
+
+          <!-- ATTENTION 0 => muted -->
+          <div class="text-right font-mono text-[13px] text-muted">
+            0
+          </div>
+        </div>
+
+        <!-- Row 6: Agent Tuning -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Agent Tuning</span>
+            <span class="text-xs text-muted leading-tight">Research</span>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 2 open, 0 ready, 1 running, 0 waiting, 1 ok => total 4 -->
+              <div style="width: 50.0%;" class="h-full bg-muted"></div>
+              <div style="width: 0%;" class="h-full bg-text"></div>
+              <div style="width: 25.0%;" class="h-full bg-agent"></div>
+              <div style="width: 0%;" class="h-full bg-warn"></div>
+              <div style="width: 25.0%;" class="h-full bg-ok"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">2 open · 0 ready · 1 running · 0 waiting</span>
+          </div>
+
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-muted italic">no milestones</span>
+          </div>
+
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            4
+          </div>
+
+          <!-- ATTENTION 0 => muted -->
+          <div class="text-right font-mono text-[13px] text-muted">
+            0
+          </div>
+        </div>
+
+        <!-- Row 7: Credential Hygiene -->
+        <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-sm font-medium text-text truncate">Credential Hygiene</span>
+            <span class="text-xs text-muted leading-tight">Operations</span>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="w-[120px] h-1 flex rounded-none overflow-hidden bg-panel">
+              <!-- 5 open, 1 ready, 0 running, 3 waiting => total 9 -->
+              <div style="width: 55.6%;" class="h-full bg-muted"></div>
+              <div style="width: 11.1%;" class="h-full bg-text"></div>
+              <div style="width: 0%;" class="h-full bg-agent"></div>
+              <div style="width: 33.3%;" class="h-full bg-warn"></div>
+            </div>
+            <span class="text-[11px] font-mono text-muted tracking-tight mt-1 truncate">5 open · 1 ready · 0 running · 3 waiting</span>
+          </div>
+
+          <div class="flex flex-col justify-center min-w-0 pr-4">
+            <span class="text-[13px] text-muted italic">no milestones</span>
+          </div>
+
+          <div class="text-right pr-4 font-mono text-[13px] text-muted">
+            9
+          </div>
+
+          <!-- ATTENTION > 0 => amber -->
+          <div class="text-right font-mono text-[13px] font-medium text-amber">
+            1
+          </div>
+        </div>
+
+      </div>
+
+      <!-- EMPTY SECTION -->
+      <div class="mt-4 pt-4 border-t border-border">
+        <!-- Section Header -->
+        <div class="px-4 pb-2">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-muted font-medium">No work attached · 3</span>
+        </div>
+
+        <div class="divide-y divide-border">
+          
+          <!-- Empty Row 1: Data Warehouse Migration -->
+          <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+            <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border"></div>
+
+            <div class="flex flex-col justify-center min-w-0 pr-4">
+              <span class="text-sm font-normal text-muted truncate">Data Warehouse Migration</span>
+              <span class="text-xs text-muted/70 leading-tight">Platform</span>
+            </div>
+
+            <div class="flex items-center">
+              <div class="w-[120px] h-1 border-b border-dashed border-border"></div>
+            </div>
+
+            <div class="flex flex-col justify-center min-w-0 pr-4">
+              <span class="text-[13px] text-muted/60 italic">no milestones</span>
+            </div>
+
+            <div class="text-right pr-4 font-mono text-xs text-muted/60">
+              empty
+            </div>
+
+            <div class="text-right font-mono text-xs text-muted/60">
+              empty
+            </div>
+          </div>
+
+          <!-- Empty Row 2: Partner Program -->
+          <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+            <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border"></div>
+
+            <div class="flex flex-col justify-center min-w-0 pr-4">
+              <span class="text-sm font-normal text-muted truncate">Partner Program</span>
+              <span class="text-xs text-muted/70 leading-tight">Growth</span>
+            </div>
+
+            <div class="flex items-center">
+              <div class="w-[120px] h-1 border-b border-dashed border-border"></div>
+            </div>
+
+            <div class="flex flex-col justify-center min-w-0 pr-4">
+              <span class="text-[13px] text-muted/60 italic">no milestones</span>
+            </div>
+
+            <div class="text-right pr-4 font-mono text-xs text-muted/60">
+              empty
+            </div>
+
+            <div class="text-right font-mono text-xs text-muted/60">
+              empty
+            </div>
+          </div>
+
+          <!-- Empty Row 3: Support Playbook -->
+          <div class="relative grid grid-cols-[minmax(280px,2.2fr)_180px_minmax(240px,1.8fr)_80px_90px] px-4 h-14 items-center hover:bg-row-hover cursor-default">
+            <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border"></div>
+
+            <div class="flex flex-col justify-center min-w-0 pr-4">
+              <span class="text-sm font-normal text-muted truncate">Support Playbook</span>
+              <span class="text-xs text-muted/70 leading-tight">Operations</span>
+            </div>
+
+            <div class="flex items-center">
+              <div class="w-[120px] h-1 border-b border-dashed border-border"></div>
+            </div>
+
+            <div class="flex flex-col justify-center min-w-0 pr-4">
+              <span class="text-[13px] text-muted/60 italic">no milestones</span>
+            </div>
+
+            <div class="text-right pr-4 font-mono text-xs text-muted/60">
+              empty
+            </div>
+
+            <div class="text-right font-mono text-xs text-muted/60">
+              empty
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Bottom keyboard hint bar -->
+  <footer class="h-6 shrink-0 bg-canvas border-t border-border flex items-center justify-between px-4 text-[11px] font-mono text-muted">
+    <div class="flex items-center space-x-4">
+      <span><span class="text-text">J/K</span> navigate</span>
+      <span>·</span>
+      <span><span class="text-text">ENTER</span> open project</span>
+      <span>·</span>
+      <span><span class="text-text">/</span> search</span>
+      <span>·</span>
+      <span><span class="text-text">A</span> filter by area</span>
+    </div>
+    <div class="flex items-center space-x-1.5">
+      <span class="w-1.5 h-1.5 rounded-full bg-ok"></span>
+      <span class="text-muted">agent:main live</span>
+    </div>
+  </footer>
+
+</body>
+</html>
