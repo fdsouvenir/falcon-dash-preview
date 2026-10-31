@@ -1,0 +1,29 @@
+{
+ "projectId": "73695549456827763",
+ "projectTitle": "Falcon Dash Work",
+ "designSystemAssetId": "854af915bec14cd3bc8d2d216d246f57",
+ "parentDesignSystem": "a43162df7de443489b7d93de906220ac (Falcon Dash Vault)",
+ "screens": {
+  "01-dashboard": {
+   "id": "fbe0cf8b88d64661b39ed091dd2f2419",
+   "name": "projects/73695549456827763/screens/fbe0cf8b88d64661b39ed091dd2f2419",
+   "title": "Falcon Dash Work - Operator Triage Board",
+   "w": "2560",
+   "h": "2048"
+  },
+  "02-projects": {
+   "id": "08e72ab3e84b437db000dcb2b559da0e",
+   "name": "projects/73695549456827763/screens/08e72ab3e84b437db000dcb2b559da0e",
+   "title": "Falcon Dash Work - Projects",
+   "w": "2560",
+   "h": "2048"
+  },
+  "03-project-detail": {
+   "id": "93363317fa55443faa59bc51292dca7b",
+   "name": "projects/73695549456827763/screens/93363317fa55443faa59bc51292dca7b",
+   "title": "Falcon Dash Work - Project Detail (Platform Rebuild)",
+   "w": "2560",
+   "h": "3388"
+  }
+ }
+}

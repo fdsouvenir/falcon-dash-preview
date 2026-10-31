@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falcon Dash Work - Operator Triage Board</title>
+  <!-- Google Fonts: Space Grotesk & Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+          colors: {
+            canvas: '#131315',
+            panel: '#1b1b1d',
+            'row-hover': '#212124',
+            border: '#353437',
+            text: '#e5e1e4',
+            muted: '#aaa9a3',
+            amber: '#f7bf59',
+            danger: '#e2564a',
+            'danger-dim': '#3a1f1c',
+            ok: '#6fbf87',
+            warn: '#d8973c',
+            agent: '#7aa2d6',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #131315;
+      color: #e5e1e4;
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #353437;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="h-screen w-screen flex flex-col bg-canvas text-text select-none overflow-hidden text-[13px] leading-tight">
+
+  <!-- 1. Top Bar -->
+  <header class="h-11 border-b border-border bg-panel flex items-center px-4 justify-between shrink-0 z-20">
+    <div class="flex items-center space-x-6">
+      <!-- Wordmark -->
+      <div class="flex items-center space-x-2">
+        <svg class="w-4 h-4 text-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+          <polyline points="2 17 12 22 22 17" />
+          <polyline points="2 12 12 17 22 12" />
+        </svg>
+        <span class="font-bold tracking-tight text-[14px] text-text">Falcon Dash</span>
+      </div>
+
+      <!-- Module Tabs -->
+      <nav class="flex items-center space-x-1 pl-2">
+        <span class="px-2.5 py-1 text-xs font-medium text-text bg-[#27272a] rounded cursor-default">Work</span>
+        <span class="px-2.5 py-1 text-xs font-medium text-muted hover:text-text cursor-default">Vault</span>
+        <span class="px-2.5 py-1 text-xs font-medium text-muted hover:text-text cursor-default">Documents</span>
+        <span class="px-2.5 py-1 text-xs font-medium text-muted hover:text-text cursor-default">Integrations</span>
+      </nav>
+
+      <!-- Persistent Search Field -->
+      <div class="relative w-80">
+        <input 
+          type="text" 
+          readonly 
+          placeholder="Search work" 
+          class="w-full bg-[#131315] border border-border text-xs px-2.5 py-1 rounded text-text placeholder:text-muted/60 focus:outline-none cursor-default font-sans"
+        />
+        <span class="absolute right-2 top-1.5 font-mono text-[10px] text-muted tracking-wider">ESC</span>
+      </div>
+    </div>
+
+    <!-- Right Identifiers -->
+    <div class="flex items-center space-x-4 font-mono text-xs">
+      <div class="flex items-center space-x-1.5 text-muted">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-ok"></span>
+        <span class="text-text">rev 1284</span>
+      </div>
+      <div class="px-2 py-0.5 border border-border rounded bg-canvas text-agent text-[11px]">
+        agent:main
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Summary Strip -->
+  <div class="h-9 border-b border-border bg-panel flex items-center px-4 justify-between shrink-0 text-xs z-10">
+    <div class="flex items-center divide-x divide-border">
+      <!-- 12 need you (Accent color amber) -->
+      <div class="pr-4 flex items-center space-x-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber inline-block"></span>
+        <span class="font-semibold text-amber">12 need you</span>
+      </div>
+      <!-- 9 in flight -->
+      <div class="px-4 flex items-center space-x-2 text-muted">
+        <span class="w-1.5 h-1.5 rounded-full bg-agent inline-block"></span>
+        <span>9 in flight</span>
+      </div>
+      <!-- 6 parked -->
+      <div class="px-4 flex items-center space-x-2 text-muted">
+        <span class="w-1.5 h-1.5 rounded-full bg-muted/60 inline-block"></span>
+        <span>6 parked</span>
+      </div>
+      <!-- 3 drifted -->
+      <div class="px-4 flex items-center space-x-2 text-muted">
+        <span class="w-1.5 h-1.5 rounded-full bg-warn inline-block"></span>
+        <span>3 drifted</span>
+      </div>
+    </div>
+
+    <div class="font-mono text-[11px] text-muted tracking-tight">
+      operator triage board &bull; authority register active
+    </div>
+  </div>
+
+  <!-- 3. Main Area: 5 Attention Buckets -->
+  <main class="flex-1 flex overflow-x-auto overflow-y-hidden bg-canvas custom-scroll">
+    
+    <!-- COLUMN 1: NEEDS YOU · 12 (roughly 30%) -->
+    <section class="w-[30%] min-w-[380px] flex flex-col border-r border-border bg-canvas shrink-0">
+      <!-- Bucket Header -->
+      <div class="h-9 px-3 border-b border-border bg-panel flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-amber"></span>
+          <h2 class="text-xs font-semibold tracking-wider text-amber uppercase">NEEDS YOU &middot; 12</h2>
+        </div>
+        <span class="text-[11px] text-muted font-mono">blocked on authority</span>
+      </div>
+
+      <!-- Bucket Content / Rows -->
+      <div class="flex-1 overflow-y-auto divide-y divide-border bg-panel/30 custom-scroll">
+        
+        <!-- Row 1: Focused Row with visible focus ring and amber left edge -->
+        <div class="h-[56px] relative flex items-center px-3 bg-row-hover hover:bg-row-hover transition-colors cursor-pointer ring-1 ring-inset ring-amber/70">
+          <!-- 2px Amber Status Edge -->
+          <div class="absolute left-0 top-0 bottom-0 w-[3px] bg-amber"></div>
+          
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <!-- Decision glyph -->
+                <span class="text-agent font-mono text-[11px] shrink-0 font-semibold" title="Decision">&loz;</span>
+                <span class="text-text font-medium truncate text-[13px]">Choose the deployment isolation boundary</span>
+              </div>
+              <!-- Chip muted -->
+              <span class="shrink-0 px-1.5 py-0.5 rounded border border-border text-[10px] font-mono text-muted bg-canvas">3 options</span>
+            </div>
+            <!-- Second line in agent color -->
+            <div class="flex items-center space-x-2 mt-0.5 text-[11px] truncate">
+              <span class="text-muted truncate">Platform Rebuild</span>
+              <span class="text-border">&bull;</span>
+              <span class="text-agent truncate font-normal">Agent recommends: Shared runtime with per-tenant namespaces</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Task -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-muted/40"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="text-muted font-mono text-[10px] shrink-0">&squ;</span>
+                <span class="text-text font-medium truncate text-[13px]">Rotate the expiring provider API credential</span>
+              </div>
+              <span class="shrink-0 px-1.5 py-0.5 rounded border border-border text-[10px] font-mono text-muted bg-canvas">authorization_required</span>
+            </div>
+            <div class="text-[11px] text-muted truncate mt-0.5">Credential Hygiene</div>
+          </div>
+        </div>
+
+        <!-- Row 3: Question -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="text-warn font-mono text-[11px] shrink-0">?</span>
+                <span class="text-text font-medium truncate text-[13px]">Confirm the target launch region</span>
+              </div>
+              <span class="shrink-0 px-1.5 py-0.5 rounded border border-border text-[10px] font-mono text-muted bg-canvas">answerable_by: user</span>
+            </div>
+            <div class="text-[11px] text-muted truncate mt-0.5">Market Expansion</div>
+          </div>
+        </div>
+
+        <!-- Row 4: Task -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-muted/40"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="text-muted font-mono text-[10px] shrink-0">&squ;</span>
+                <span class="text-text font-medium truncate text-[13px]">Apply the database migration to production</span>
+              </div>
+              <span class="shrink-0 px-1.5 py-0.5 rounded border border-border text-[10px] font-mono text-muted bg-canvas">authorization_required</span>
+            </div>
+            <div class="text-[11px] text-muted truncate mt-0.5">Platform Rebuild</div>
+          </div>
+        </div>
+
+        <!-- Row 5: Ask -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-muted/40"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="text-muted font-mono text-[11px] shrink-0">&gt;</span>
+                <span class="text-text font-medium truncate text-[13px]">Approve running the nightly reconciliation job</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-muted truncate mt-0.5">Billing Reconciliation</div>
+          </div>
+        </div>
+
+        <!-- Row 6: Task -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-muted/40"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="text-muted font-mono text-[10px] shrink-0">&squ;</span>
+                <span class="text-text font-medium truncate text-[13px]">Enable outbound email on the production domain</span>
+              </div>
+              <span class="shrink-0 px-1.5 py-0.5 rounded border border-border text-[10px] font-mono text-muted bg-canvas">authorization_required</span>
+            </div>
+            <div class="text-[11px] text-muted truncate mt-0.5">Customer Onboarding</div>
+          </div>
+        </div>
+
+        <!-- Row 7: Task -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-muted/40"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 min-w-0">
+                <span class="text-muted font-mono text-[10px] shrink-0">&squ;</span>
+                <span class="text-text font-medium truncate text-[13px]">Publish the pricing page</span>
+              </div>
+              <span class="shrink-0 px-1.5 py-0.5 rounded border border-border text-[10px] font-mono text-muted bg-canvas">authorization_required</span>
+            </div>
+            <div class="text-[11px] text-muted truncate mt-0.5">Website Refresh</div>
+          </div>
+        </div>
+
+        <!-- Bottom count indicator of remaining items -->
+        <div class="p-3 text-center text-xs text-muted/60 font-mono">
+          +5 additional items requiring operator authority
+        </div>
+
+      </div>
+    </section>
+
+    <!-- COLUMN 2: DRIFTED · 3 (roughly 24%) -->
+    <section class="w-[24%] min-w-[310px] flex flex-col border-r border-border bg-canvas shrink-0">
+      <!-- Bucket Header -->
+      <div class="h-9 px-3 border-b border-border bg-panel flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-warn"></span>
+          <h2 class="text-xs font-semibold tracking-wider text-muted uppercase">DRIFTED &middot; 3</h2>
+        </div>
+        <span class="text-[11px] text-muted font-mono">definition mismatch</span>
+      </div>
+
+      <!-- Bucket Content -->
+      <div class="flex-1 overflow-y-auto divide-y divide-border bg-panel/30 custom-scroll">
+        
+        <!-- Row 1 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-text font-medium truncate text-[13px]">Implement the tenant data plane</span>
+              <span class="text-[11px] text-muted shrink-0">Platform Rebuild</span>
+            </div>
+            <!-- Warning-colored monospace drift badge on own line -->
+            <div class="mt-1">
+              <span class="font-mono text-[10px] text-warn bg-warn/10 border border-warn/30 px-1.5 py-0.5 rounded inline-block">
+                pinned @rev 1 &middot; current @rev 3
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-text font-medium truncate text-[13px]">Define the signup and activation manifest</span>
+              <span class="text-[11px] text-muted shrink-0">Customer Onboarding</span>
+            </div>
+            <div class="mt-1">
+              <span class="font-mono text-[10px] text-warn bg-warn/10 border border-warn/30 px-1.5 py-0.5 rounded inline-block">
+                pinned @rev 2 &middot; current @rev 4
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-warn"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-text font-medium truncate text-[13px]">Harden the OAuth token lifecycle</span>
+              <span class="text-[11px] text-muted shrink-0">Platform Rebuild</span>
+            </div>
+            <div class="mt-1">
+              <span class="font-mono text-[10px] text-warn bg-warn/10 border border-warn/30 px-1.5 py-0.5 rounded inline-block">
+                pinned @rev 1 &middot; current @rev 2
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- COLUMN 3: IN FLIGHT · 9 (roughly 20%) -->
+    <section class="w-[20%] min-w-[260px] flex flex-col border-r border-border bg-canvas shrink-0">
+      <!-- Bucket Header -->
+      <div class="h-9 px-3 border-b border-border bg-panel flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-agent"></span>
+          <h2 class="text-xs font-semibold tracking-wider text-muted uppercase">IN FLIGHT &middot; 9</h2>
+        </div>
+        <span class="text-[11px] text-agent font-mono">agent running</span>
+      </div>
+
+      <!-- Bucket Content -->
+      <div class="flex-1 overflow-y-auto divide-y divide-border bg-panel/30 custom-scroll">
+        
+        <!-- Row 1 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <!-- Status edges and emphasis use agent color -->
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Inventory available integrations and draft the dashboard</span>
+            <span class="text-[11px] text-muted truncate mt-0.5">Website Refresh</span>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Write onboarding copy and creative requirements</span>
+            <span class="text-[11px] text-muted truncate mt-0.5">Customer Onboarding</span>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Benchmark the new model against the current context</span>
+            <span class="text-[11px] text-muted truncate mt-0.5">Agent Tuning</span>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-agent"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Produce the first market research package</span>
+            <span class="text-[11px] text-muted truncate mt-0.5">Market Expansion</span>
+          </div>
+        </div>
+
+        <div class="p-3 text-center text-xs text-muted/60 font-mono">
+          +5 background executions running
+        </div>
+
+      </div>
+    </section>
+
+    <!-- COLUMN 4: PARKED · 6 (roughly 20%) -->
+    <section class="w-[20%] min-w-[260px] flex flex-col border-r border-border bg-canvas shrink-0">
+      <!-- Bucket Header -->
+      <div class="h-9 px-3 border-b border-border bg-panel flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-muted/60"></span>
+          <h2 class="text-xs font-semibold tracking-wider text-muted uppercase">PARKED &middot; 6</h2>
+        </div>
+        <span class="text-[11px] text-muted font-mono">external wait</span>
+      </div>
+
+      <!-- Bucket Content -->
+      <div class="flex-1 overflow-y-auto divide-y divide-border bg-panel/30 custom-scroll">
+        
+        <!-- Row 1 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Install screen capture support on the workstation</span>
+            <span class="text-[11px] text-muted/80 font-mono truncate mt-0.5">waiting on: user</span>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Restore CRM API authentication</span>
+            <span class="text-[11px] text-muted/80 font-mono truncate mt-0.5">waiting on: vendor support ticket</span>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="h-[56px] relative flex items-center px-3 bg-panel hover:bg-row-hover transition-colors cursor-pointer">
+          <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border"></div>
+          <div class="flex-1 min-w-0 pl-1.5 flex flex-col justify-center">
+            <span class="text-text font-medium truncate text-[13px]">Validate the reporting integration</span>
+            <span class="text-[11px] text-muted/80 font-mono truncate mt-0.5">waiting on: marketplace OAuth handoff</span>
+          </div>
+        </div>
+
+        <div class="p-3 text-center text-xs text-muted/60 font-mono">
+          +3 additional parked tasks
+        </div>
+
+      </div>
+    </section>
+
+    <!-- COLUMN 5: RECONCILE · 0 (Narrow, empty state) -->
+    <section class="flex-1 min-w-[180px] flex flex-col bg-canvas shrink-0">
+      <!-- Bucket Header -->
+      <div class="h-9 px-3 border-b border-border bg-panel flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-border"></span>
+          <h2 class="text-xs font-semibold tracking-wider text-muted uppercase">RECONCILE &middot; 0</h2>
+        </div>
+        <span class="text-[11px] text-muted/60 font-mono">clean</span>
+      </div>
+
+      <!-- Collapses to a single muted line with no card, box, or illustration -->
+      <div class="p-3">
+        <p class="text-xs text-muted font-mono italic">Nothing to reconcile.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 4. Bottom Keyboard Hint Bar -->
+  <footer class="h-6 border-t border-border bg-panel flex items-center justify-between px-4 text-[11px] font-mono text-muted shrink-0 z-20">
+    <div class="flex items-center space-x-3">
+      <span><span class="text-text">J/K</span> navigate</span>
+      <span class="text-border">&bull;</span>
+      <span><span class="text-text">ENTER</span> inspect</span>
+      <span class="text-border">&bull;</span>
+      <span><span class="text-text">SPACE</span> open authority block</span>
+      <span class="text-border">&bull;</span>
+      <span><span class="text-text">/</span> search</span>
+    </div>
+    <div class="flex items-center space-x-2 text-[11px]">
+      <span class="w-1.5 h-1.5 rounded-full bg-ok inline-block"></span>
+      <span class="text-muted">agent:main live</span>
+    </div>
+  </footer>
+
+</body>
+</html>
